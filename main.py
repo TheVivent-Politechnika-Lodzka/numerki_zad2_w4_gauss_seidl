@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.core.defchararray import equal
 import matrix_lib as lib
 
 # szuka na podstawie tego
@@ -19,11 +18,32 @@ def search(M, out, X):
     return X
 
 
+# sprawdza czy maksymalna względna zmiana składowej
+# przybliżonego rozwiązania nie przekracza eps
+def error_A(prev_xs, xs, eps=None):
+    '''
+    prev_xs - poprzedni wynik\n
+    xs      - obecny wynik\n
+    eps     - jeżeli nie podany funkcja zwróci zmianę\n
+    eps     - jeżeli podany funkcja zwróci True, gdy\n
+              będzie trzeba zatrzymać szukanie
+    '''
+    # utwórz wektor różnicowy
+    diff = []
+    for i in range(len(prev_xs)):
+        diff.append(xs[i]-prev_xs[i])
+    # weź maksymalną absolutną zmianę
+    max_diff = max(list(map(abs, diff)))
+    # jeżeli eps to None, zwróć zmianę
+    if (eps == None): return max_diff
+    # zwróć czy zmiana jest mniejsza
+    # od zakładanej (eps powinien być < 1)
+    return max_diff < eps*max(list(map(abs, xs)))
 
 
 # załaduj macierz
 matrix = []
-with open("matrix.txt") as file_in:
+with open(input("Podaj nazwę pliku z macierzą: ")) as file_in:
     for line in file_in:
         line = line.replace('\n', '')
         matrix.append(list(map(float, line.split())))
@@ -33,6 +53,7 @@ equals = []
 for line in matrix:
     equals.append(line.pop())
 
+# przerób wszystkie macierze/wektory na numpy'owe
 matrix = np.array(matrix)
 equals = np.array(equals)
 xs = np.zeros(len(equals))
@@ -45,6 +66,25 @@ if (not lib.is_matrix_convergent(matrix)):
     print("Macierz nie jest zbieżna!!!")
     exit()
 
-for i in range(2):
-    xs = search(matrix, equals, xs)
-    print(xs)
+''' trzeba napisać funkcję której warunkiem stopu będzie coś
+tam związane z wektorem błędu (coś jest na wiki) '''
+
+
+''' przykład jak zrobić funkcję szukającą po błędzie A '''
+# xs = search(matrix, equals, xs)
+# prev_xs = xs.copy()
+# xs = search(matrix, equals, xs)
+# i = 2
+# while not error_A(prev_xs, xs, 0.000001):
+#     i += 1
+#     prev_xs = xs.copy()
+#     xs = search(matrix, equals, xs)
+
+
+
+''' przykład jak zrobić funkcję szukającą iteracyjnie '''
+# for i in range(100):
+#     prev_xs = xs
+#     xs = search(matrix, equals, xs)
+    
+

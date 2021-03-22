@@ -1,15 +1,19 @@
 import numpy as np
+from numpy.core.defchararray import equal
 import matrix_lib as lib
 
-# napisać szukańsko wg tego
+# szuka na podstawie tego
 # https://pl.wikipedia.org/wiki/Metoda_Gaussa-Seidla#Uk%C5%82ad_trzech_r%C3%B3wna%C5%84_liniowych
 # search(), to wykonanie jednej iteracji
-def search(M, X):
+def search(M, out, X):
     for i in range(len(M)):
         sum = 0
-        
-
-
+        for j in range(len(M)):
+            if (i == j): continue
+            sum -= M[i][j]*X[j]
+        sum += out[i]
+        sum /= M[i][i]
+        X[i] = sum
     return X
 
 
@@ -20,16 +24,16 @@ matrix = []
 with open("matrix.txt") as file_in:
     for line in file_in:
         line = line.replace('\n', '')
-        matrix.append(list(map(int, line.split())))
+        matrix.append(list(map(float, line.split())))
 
 # wydziel z macierzy spodziewane wyniki
-expected_results = []
+equals = []
 for line in matrix:
-    expected_results.append(line.pop())
+    equals.append(line.pop())
 
 matrix = np.array(matrix)
-expected_results = np.array(expected_results)
-current_results = np.zeros(len(expected_results))
+equals = np.array(equals)
+xs = np.zeros(len(equals))
 
 # sprawdź macierz
 if (not lib.is_matrix_square(matrix)):
@@ -39,6 +43,6 @@ if (not lib.is_matrix_convergent(matrix)):
     print("Macierz nie jest zbieżna!!!")
     exit()
 
-print(matrix)
-print(expected_results)
-print(current_results)
+for i in range(2):
+    xs = search(matrix, equals, xs)
+    print(xs)

@@ -5,6 +5,8 @@ import matrix_lib as lib
 # szuka na podstawie tego
 # https://pl.wikipedia.org/wiki/Metoda_Gaussa-Seidla#Uk%C5%82ad_trzech_r%C3%B3wna%C5%84_liniowych
 # search(), to wykonanie jednej iteracji
+# rozrysowane jak działa kod jest w pliku
+# "komentarz do funkcji search.png"
 def search(M, out, X):
     for i in range(len(M)):
         sum = 0

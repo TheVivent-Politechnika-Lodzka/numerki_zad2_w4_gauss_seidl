@@ -24,8 +24,8 @@ def error_A(prev_xs, xs, eps=None):
     '''
     prev_xs - poprzedni wynik\n
     xs      - obecny wynik\n
-    eps     - jeżeli nie podany funkcja zwróci zmianę\n
-    eps     - jeżeli podany funkcja zwróci True, gdy\n
+    eps     - jeżeli nie podany, funkcja zwróci zmianę\n
+    eps     - jeżeli podany, funkcja zwróci True, gdy\n
               będzie trzeba zatrzymać szukanie
     '''
     # utwórz wektor różnicowy
@@ -40,7 +40,17 @@ def error_A(prev_xs, xs, eps=None):
     # od zakładanej (eps powinien być < 1)
     return max_diff < eps*max(list(map(abs, xs)))
 
+# sprawdza czy maksymalne odchylenie jest mniejsze od założonego
+# na podstawie wektora zmian (vec)
 def error_B(M, out, X, eps=None):
+    '''
+    M   - macierz wejściowa\n
+    out - wektor wyników\n
+    X   - wektor obliczonych x'ów\n
+    eps - jeżeli nie podany, funkcja zwróci zmianę\n
+    eps - jeżeli podany, funkcja zwróci True, gdy\n
+          trzeba zatrzymać szukanie
+    '''
     vec = []
     for i in range(len(M)):
         line = M[i]
@@ -78,12 +88,10 @@ if (not lib.is_matrix_convergent(matrix)):
     exit()
 
 ''' przykład jak zrobić funkcę szukającą po błędzie B '''
-i = 0
-while not error_B(matrix, equals, xs, 0.00001):
-    i += 1
-    xs = search(matrix, equals, xs)
-print(i)
-print(xs)
+# i = 0
+# while not error_B(matrix, equals, xs, 0.00001):
+#     i += 1
+#     xs = search(matrix, equals, xs)
 
 
 ''' przykład jak zrobić funkcję szukającą po błędzie A '''

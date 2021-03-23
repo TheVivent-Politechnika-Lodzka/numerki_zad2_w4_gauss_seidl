@@ -68,7 +68,7 @@ if (not lib.is_matrix_convergent(matrix)):
 
 ''' trzeba napisać funkcję której warunkiem stopu będzie coś
 tam związane z wektorem błędu (coś jest na wiki) '''
-
+#
 
 ''' przykład jak zrobić funkcję szukającą po błędzie A '''
 # xs = search(matrix, equals, xs)

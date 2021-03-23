@@ -55,11 +55,18 @@ def error_B(M, out, X, eps=None):
     for i in range(len(M)):
         line = M[i]
         sum = 0
+        # oblicz każde równanie w macierzy
+        # używając osiągniętych x'ów
         for j in range(len(line)):
             sum += (line[j]*X[j])
+        # wrzuć do wektora różnic, różnicę
+        # między obliczonym wynikiem, a oczekiwanym
         vec.append(out[i] - sum)
+    # znajdź maksymalne odchylenie
     max_diff = max(list(map(abs, vec)))
+    # jeżeli eps nie podany, zwróć różnicę
     if (eps == None): return max_diff
+    # jeżeli eps podany, zwróć czy zatrzymać szukanie
     return max_diff < eps
 
 # załaduj macierz

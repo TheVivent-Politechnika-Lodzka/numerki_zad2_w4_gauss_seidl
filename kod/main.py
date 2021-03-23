@@ -40,6 +40,17 @@ def error_A(prev_xs, xs, eps=None):
     # od zakładanej (eps powinien być < 1)
     return max_diff < eps*max(list(map(abs, xs)))
 
+def error_B(M, out, X, eps=None):
+    vec = []
+    for i in range(len(M)):
+        line = M[i]
+        sum = 0
+        for j in range(len(line)):
+            sum += (line[j]*X[j])
+        vec.append(out[i] - sum)
+    max_diff = max(list(map(abs, vec)))
+    if (eps == None): return max_diff
+    return max_diff < eps
 
 # załaduj macierz
 matrix = []
@@ -66,9 +77,14 @@ if (not lib.is_matrix_convergent(matrix)):
     print("Macierz nie jest zbieżna!!!")
     exit()
 
-''' trzeba napisać funkcję której warunkiem stopu będzie coś
-tam związane z wektorem błędu (coś jest na wiki) '''
-#
+''' przykład jak zrobić funkcę szukającą po błędzie B '''
+i = 0
+while not error_B(matrix, equals, xs, 0.00001):
+    i += 1
+    xs = search(matrix, equals, xs)
+print(i)
+print(xs)
+
 
 ''' przykład jak zrobić funkcję szukającą po błędzie A '''
 # xs = search(matrix, equals, xs)

@@ -3,6 +3,29 @@ import matrix_lib as lib
 import gauss_seidl as gs
 import charts
 
+def search_by_iterations(i, matrix, equals, xs):
+    points = [] # tablica na punkty [iteracja, błąd] do wykresu
+    
+    X = xs.copy() # zabezpieczenie przed nadpisywaniem pamięci
+    prev_x = []   # tablica na poprzedni wynik
+    for i in range(i):
+        prev_x = X.copy()
+        X = gs.search(matrix, equals, X)
+        points.append([i, gs.change_of_diff_vec(matrix, equals, X)])
+    # zwraca:
+    # liczbę iteracji
+    # zmianę składowych
+    # zmianę wektora zmian
+    # punkty na wykres
+    # wynik
+    return \
+        i,\
+        gs.change_of_components(prev_x, X),\
+        gs.change_of_diff_vec(matrix, equals, X),\
+        points,\
+        X
+
+
 # załaduj macierz
 matrix = []
 with open(input("Podaj nazwę pliku z macierzą: ")) as file_in:
@@ -40,7 +63,7 @@ points = []
 result = []
 if (opt == 1):
     i = int(input("liczba iteracji do wykonania: "))
-    # i, err_comp, err_diff_vec, points, result = # funkcja która to wszystko zwróci
+    i, err_comp, err_diff_vec, points, result = search_by_iterations(i, matrix, equals, xs)
 if (opt == 2 or opt == 3):
     eps = float(input("podaj epsilon: "))
     # if (opt == 2):
@@ -63,9 +86,8 @@ print("Wynik:                   ", end="")
 print(result)
 print("##################################")
 
-# gotowa funkcja do wyrysowania wykresu. Jest zakomentowana, bo nie ma
-# jeszcze funkcji które zwracają `points`
-# charts.create_chart(np.array(points).transpose(), input("nazwij plik wykresu: "))
+# UWAGA!!! działa tylko dla itercyjnego, bo reszta nie jest napisana
+charts.create_chart(np.array(points).transpose(), input("nazwij plik wykresu: "))
 
 
 '''

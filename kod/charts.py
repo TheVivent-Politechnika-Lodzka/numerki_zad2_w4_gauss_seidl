@@ -9,11 +9,11 @@ def create_chart(points, filename):
     plt.axhline(0, color='black')
     plt.axvline(0, color='black')
 
-    # przekształć i narysuj punkty
+    # narysuj punkty
     plt.plot(points[0], points[1], "bo")
 
     # pokaż
     # plt.show()
 
     # zapisz
-    plt.savefig(filename + ".png")
+    plt.savefig("wykresy/" + filename + ".png")

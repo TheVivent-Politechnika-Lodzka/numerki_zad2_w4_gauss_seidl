@@ -5,7 +5,6 @@ import charts
 
 def search_by_iterations(i, matrix, equals, xs):
     points = [] # tablica na punkty [iteracja, zmiana wektora, zmiana składowych] do wykresu
-    
     X = xs.copy() # zabezpieczenie przed nadpisywaniem xs
     prev_x = []   # tablica na poprzedni wynik
     for i in range(i):
@@ -50,11 +49,35 @@ def search_by_diff_vec(eps, matrix, equals, xs):
         points,\
         X
 
+def search_by_components(eps, matrix, equals, xs):
+    points = [] # tablica na punkty [iteracja, zmiana wektora, zmiana składowych] do wykresu
+    X = xs.copy()   # zabezpieczenie przed nadpisywaniem xs
+    prev_x = []     # tablica na poprzedni wynik
+    i = 0
+    while True:
+        i += 1
+        prev_x = X.copy()
+        X = gs.search(matrix, equals, X)
+        points.append([i, gs.change_of_diff_vec(matrix, equals, X), gs.change_of_components(prev_x, X)])
+        if gs.change_of_components(prev_x, X, eps): break
+    # zwraca:
+    # liczbę iteracji
+    # zmianę składowych
+    # zmianę wektora zmian
+    # punkty na wykres
+    # wynik
+    return \
+        i,\
+        gs.change_of_components(prev_x, X),\
+        gs.change_of_diff_vec(matrix, equals, X),\
+        points,\
+        X
+
 
 
 # załaduj macierz
 matrix = []
-with open(input("Podaj nazwę pliku z macierzą: ")) as file_in:
+with open("macierze/" + input("Podaj nazwę pliku z macierzą: ")) as file_in:
     for line in file_in:
         line = line.replace('\n', '')
         matrix.append(list(map(float, line.split())))
@@ -92,8 +115,8 @@ if (opt == 1):
     i, err_comp, err_diff_vec, points, result = search_by_iterations(i, matrix, equals, xs)
 if (opt == 2 or opt == 3):
     eps = float(input("podaj epsilon: "))
-    # if (opt == 2):
-        # i, err_comp, err_diff_vec, points, result = # funkcja która to wszystko zwróci
+    if (opt == 2):
+        i, err_comp, err_diff_vec, points, result = search_by_components(eps, matrix, equals, xs)
     if (opt == 3):
         i, err_comp, err_diff_vec, points, result = search_by_diff_vec(eps, matrix, equals, xs)
 print()
@@ -114,27 +137,3 @@ print("##################################")
 
 # UWAGA!!! działa tylko dla itercyjnego, bo reszta nie jest napisana
 charts.create_chart(np.array(points).transpose(), input("nazwij plik wykresu: "))
-
-
-'''
-przykład jak zrobić funkcję której warunkiem stopu
-będzie śledzenie wektora różnic
-'''
-# i = 0
-# while not error_B(matrix, equals, xs, 0.00001):
-#     i += 1
-#     xs = search(matrix, equals, xs)
-
-
-'''
-przykład jak zrobić funkcję której warunkiem stopu
-będzie śledzenie zmian składowych
-'''
-# xs = search(matrix, equals, xs)
-# prev_xs = xs.copy()
-# xs = search(matrix, equals, xs)
-# i = 2
-# while not error_A(prev_xs, xs, 0.000001):
-#     i += 1
-#     prev_xs = xs.copy()
-#     xs = search(matrix, equals, xs)

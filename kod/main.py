@@ -4,14 +4,14 @@ import gauss_seidl as gs
 import charts
 
 def search_by_iterations(i, matrix, equals, xs):
-    points = [] # tablica na punkty [iteracja, błąd] do wykresu
+    points = [] # tablica na punkty [iteracja, zmiana wektora, zmiana składowych] do wykresu
     
-    X = xs.copy() # zabezpieczenie przed nadpisywaniem pamięci
+    X = xs.copy() # zabezpieczenie przed nadpisywaniem xs
     prev_x = []   # tablica na poprzedni wynik
     for i in range(i):
         prev_x = X.copy()
         X = gs.search(matrix, equals, X)
-        points.append([i, gs.change_of_diff_vec(matrix, equals, X)])
+        points.append([i, gs.change_of_diff_vec(matrix, equals, X), gs.change_of_components(prev_x, X)])
     # zwraca:
     # liczbę iteracji
     # zmianę składowych
@@ -24,6 +24,32 @@ def search_by_iterations(i, matrix, equals, xs):
         gs.change_of_diff_vec(matrix, equals, X),\
         points,\
         X
+
+
+def search_by_diff_vec(eps, matrix, equals, xs):
+    points = [] # tablica na punkty [iteracja, zmiana wektora, zmiana składowych] do wykresu
+    X = xs.copy()   # zabezpieczenie przed nadpisywaniem xs
+    prev_x = []     # tablica na poprzedni wynik
+    i = 0
+    while not gs.change_of_diff_vec(matrix, equals, X, eps):
+        i += 1
+        prev_x = X.copy()
+        X = gs.search(matrix, equals, X)
+        points.append([i, gs.change_of_diff_vec(matrix, equals, X), gs.change_of_components(prev_x, X)])
+
+    # zwraca:
+    # liczbę iteracji
+    # zmianę składowych
+    # zmianę wektora zmian
+    # punkty na wykres
+    # wynik
+    return \
+        i,\
+        gs.change_of_components(prev_x, X),\
+        gs.change_of_diff_vec(matrix, equals, X),\
+        points,\
+        X
+
 
 
 # załaduj macierz
@@ -68,8 +94,8 @@ if (opt == 2 or opt == 3):
     eps = float(input("podaj epsilon: "))
     # if (opt == 2):
         # i, err_comp, err_diff_vec, points, result = # funkcja która to wszystko zwróci
-    # if (opt == 3):
-        # i, err_comp, err_diff_vec, points, result = # funkcja która to wszystko zwróci
+    if (opt == 3):
+        i, err_comp, err_diff_vec, points, result = search_by_diff_vec(eps, matrix, equals, xs)
 print()
 print("##################################")
 print("Wybrana metoda szukania: ", end="")
@@ -112,12 +138,3 @@ będzie śledzenie zmian składowych
 #     i += 1
 #     prev_xs = xs.copy()
 #     xs = search(matrix, equals, xs)
-
-
-
-''' przykład jak zrobić funkcję szukającą iteracyjnie '''
-# for i in range(100):
-#     prev_xs = xs
-#     xs = search(matrix, equals, xs)
-    
-

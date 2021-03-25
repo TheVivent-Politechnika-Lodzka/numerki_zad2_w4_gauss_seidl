@@ -10,7 +10,7 @@ def create_chart(points, filename):
     plt.axvline(0, color='black')
 
     # narysuj punkty
-    plt.plot(points[0], points[1], "b.", label="różnica wektora różnic")
+    plt.plot(points[0], points[1], "bo", label="różnica wektora różnic")
     plt.plot(points[0], points[2], "r.", label="różnica składowych")
     plt.legend(loc="upper right")
 

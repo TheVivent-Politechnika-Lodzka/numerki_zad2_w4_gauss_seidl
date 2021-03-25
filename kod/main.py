@@ -107,7 +107,7 @@ print("3. Przez śledzenie wektora różnic")
 opt = int(input("Wybierz warunek stopu: "))
 
 
-i, eps, err_com, err_diff_vec = 0, 0, 0, 0
+i, eps, err_comp, err_diff_vec = 0, 0, 0, 0
 points = []
 result = []
 if (opt == 1):
@@ -129,7 +129,7 @@ if opt == 3: print("śledzenie wektora różnic")
 print("ilość iteracji:          " + str(i))
 if opt == 2 or opt == 3:
     print("epsilon:                 " + str(eps))
-print("błąd zmian składowych:   " + str(err_com))
+print("błąd zmian składowych:   " + str(err_comp))
 print("błąd wektora różnic:     " + str(err_diff_vec))
 print("Wynik:                   ", end="")
 print(result)

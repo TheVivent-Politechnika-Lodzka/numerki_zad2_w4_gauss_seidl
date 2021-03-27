@@ -1,3 +1,5 @@
+import numpy as np
+
 # macierz kwadratowa, to taka gdzie wysokość
 # oraz wszystkie szerokości są takie same
 def is_matrix_square(M):
@@ -12,12 +14,14 @@ def is_matrix_square(M):
     return True
 
 
-# Macierz dominująca to macierz, której wartości
+# Macierz dominująca/zbieżna to macierz, której wartości
 # bezwzględne elementów na głównej przekątnej są
 # większe od sumy wartości bezwzględnych
 # pozostałych elementów w wierszach
-def is_matrix_convergent(M):
+def is_matrix_weakly_convergent_in_rows(M):
     # dla każdej linii macierzy
+    strong = 0
+    weak = 0
     for i in range(len(M)):
         # policz sumę wartości bezwzględnych
         # z wyłączeniem wartości na przekątnej
@@ -28,7 +32,11 @@ def is_matrix_convergent(M):
         # jeżeli ta suma jest większa lub równa
         # wartości bezwzględnej wartości na przekątnej
         # to macierz NIE jest zbieżna
-        if (sum >= abs(M[i][i])):
+        if (sum > abs(M[i][i])):
             return False
     # jak przeszło, to macierz jest zbieżna
     return True
+
+def is_matrix_positivly_specified(M):
+    return np.all(np.linalg.eigvals(M) > 0)
+    

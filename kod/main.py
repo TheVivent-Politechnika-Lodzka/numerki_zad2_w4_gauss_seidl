@@ -96,12 +96,29 @@ xs = np.zeros(len(equals))
 if (not lib.is_matrix_square(matrix)):
     print("Macierz nie jest kwadratowa !!!")
     exit()
+
+def tick_off(test):
+    if test:
+        print("✓")
+        return 1
+    print("✗")
+    return 0
+
 yes = 0
-if lib.is_matrix_weakly_convergent_in_rows(matrix): yes += 1
-if lib.is_matrix_positivly_specified(matrix): yes += 1
+
+print("Czy macierz jest słabo-dominująca po rzędach: ", end="")
+yes += tick_off(lib.is_matrix_weakly_convergent(matrix))
+
+print("Czy macierz jest słabo-dominująca po kolumnach: ", end="")
+yes += tick_off(lib.is_matrix_weakly_convergent(matrix.transpose()))
+
+print("Czy macierz jest dodatnio określona: ", end="")
+yes += tick_off(lib.is_matrix_positivly_specified(matrix))
+
 
 print("Macierz spełnia \"" + str(yes) + "\" warunków zbieżności")
-# if yes == 0: exit()
+if yes == 0: 
+    if (input("kontynuować?[y/n]: ") == "n"): exit()
 
 print()
 print("1. Iteracyjnie")

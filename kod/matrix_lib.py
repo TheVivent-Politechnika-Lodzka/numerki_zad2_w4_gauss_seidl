@@ -18,7 +18,7 @@ def is_matrix_square(M):
 # bezwzględne elementów na głównej przekątnej są
 # większe od sumy wartości bezwzględnych
 # pozostałych elementów w wierszach
-def is_matrix_weakly_convergent_in_rows(M):
+def is_matrix_weakly_convergent(M):
     # dla każdej linii macierzy
     strong = 0
     weak = 0
@@ -29,13 +29,13 @@ def is_matrix_weakly_convergent_in_rows(M):
         for j in range(len(M[i])):
             if (i == j): continue
             sum += abs(M[i][j])
-        # jeżeli ta suma jest większa lub równa
-        # wartości bezwzględnej wartości na przekątnej
-        # to macierz NIE jest zbieżna
-        if (sum > abs(M[i][i])):
-            return False
-    # jak przeszło, to macierz jest zbieżna
-    return True
+        if (abs(M[i][i]) >= sum):
+            strong +=1
+        elif(abs(M[i][i]) > sum):
+            weak +=1
+    if strong == 0: return False
+    if (strong + weak == len(M)): return True
+    return False
 
 def is_matrix_positivly_specified(M):
     return np.all(np.linalg.eigvals(M) > 0)

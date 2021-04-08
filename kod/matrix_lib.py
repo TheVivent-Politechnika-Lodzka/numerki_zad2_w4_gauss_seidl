@@ -20,7 +20,6 @@ def is_matrix_square(M):
 # pozostałych elementów w wierszach
 def is_matrix_weakly_convergent(M):
     # dla każdej linii macierzy
-    strong = 0
     weak = 0
     for i in range(len(M)):
         # policz sumę wartości bezwzględnych
@@ -30,11 +29,8 @@ def is_matrix_weakly_convergent(M):
             if (i == j): continue
             sum += abs(M[i][j])
         if (abs(M[i][i]) >= sum):
-            strong +=1
-        elif(abs(M[i][i]) > sum):
             weak +=1
-    if strong == 0: return False
-    if (strong + weak == len(M)): return True
+    if (weak == len(M)): return True
     return False
 
 def is_matrix_positivly_specified(M):

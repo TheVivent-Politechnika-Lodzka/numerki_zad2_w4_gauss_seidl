@@ -1,6 +1,7 @@
 import numpy as np
 import matrix_lib as lib
 import gauss_seidl as gs
+import matrix_fixer as mf
 import charts
 
 def search_by_iterations(i, matrix, equals, xs):
@@ -100,24 +101,41 @@ if (not lib.is_matrix_square(matrix)):
 def tick_off(test):
     if test:
         print("✓")
-        return 1
+        return True
     print("✗")
-    return 0
+    return False
 
-yes = 0
+
+number_of_conditions = 0
 
 print("Czy macierz jest słabo-dominująca po rzędach: ", end="")
-yes += tick_off(lib.is_matrix_weakly_convergent(matrix))
+yes = tick_off(lib.is_matrix_weakly_convergent(matrix))
+if not yes and input("Spróbować naprawić?[y/n]") == "y":
+    was_fix_successful, matrix = mf.try_fix_matrix(matrix)
+    print("Czy macierz udało się \"naprawić\": ", end="")
+    if tick_off(was_fix_successful): number_of_conditions +=1
+elif yes:
+    number_of_conditions += 1
+
+
 
 print("Czy macierz jest słabo-dominująca po kolumnach: ", end="")
-yes += tick_off(lib.is_matrix_weakly_convergent(matrix.transpose()))
+yes = tick_off(lib.is_matrix_weakly_convergent(matrix.transpose()))
+if not yes and input("Spróbować naprawić?[y/n]") == "y":
+    was_fix_successful, matrix = mf.try_fix_matrix(matrix.transpose())
+    matrix = matrix.transpose()
+    print("Czy macierz udało się \"naprawić\": ", end="")
+    if tick_off(was_fix_successful): number_of_conditions +=1
+elif yes:
+    number_of_conditions += 1
+
 
 print("Czy macierz jest dodatnio określona: ", end="")
-yes += tick_off(lib.is_matrix_positivly_specified(matrix))
+yes = tick_off(lib.is_matrix_positivly_specified(matrix))
+if yes: number_of_conditions += 1
 
-
-print("Macierz spełnia \"" + str(yes) + "\" warunków zbieżności")
-if yes == 0: 
+print("Macierz spełnia \"" + str(number_of_conditions) + "\" warunków zbieżności")
+if number_of_conditions == 0: 
     if (input("kontynuować?[y/n]: ") == "n"): exit()
 
 print()
@@ -155,5 +173,5 @@ print("Wynik:                   ", end="")
 print(result)
 print("##################################")
 
-# UWAGA!!! działa tylko dla itercyjnego, bo reszta nie jest napisana
+# wygeneruj wykres
 charts.create_chart(np.array(points).transpose(), input("nazwij plik wykresu: "))

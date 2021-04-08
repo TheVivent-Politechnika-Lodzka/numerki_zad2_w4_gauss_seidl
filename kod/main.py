@@ -99,34 +99,35 @@ if (not lib.is_matrix_square(matrix)):
     exit()
 
 def tick_off(test):
-    if test:
-        print("✓")
-        return True
-    print("✗")
-    return False
+    if test: print("✓")
+    else: print("✗")
+    return test
 
 
 number_of_conditions = 0
 
 print("Czy macierz jest słabo-dominująca po rzędach: ", end="")
 yes = tick_off(lib.is_matrix_weakly_convergent(matrix))
-if not yes and input("Spróbować naprawić?[y/n]") == "y":
-    was_fix_successful, matrix = mf.try_fix_matrix(matrix)
-    print("Czy macierz udało się \"naprawić\": ", end="")
-    if tick_off(was_fix_successful): number_of_conditions +=1
-elif yes:
+if not yes:
+    was_fix_successful, res = mf.try_fix_matrix(matrix)
+    print("    Czy macierz udało się \"naprawić\": ", end="")
+    if tick_off(was_fix_successful): 
+        matrix = res
+        number_of_conditions +=1
+else:
     number_of_conditions += 1
 
 
 
 print("Czy macierz jest słabo-dominująca po kolumnach: ", end="")
 yes = tick_off(lib.is_matrix_weakly_convergent(matrix.transpose()))
-if not yes and input("Spróbować naprawić?[y/n]") == "y":
-    was_fix_successful, matrix = mf.try_fix_matrix(matrix.transpose())
-    matrix = matrix.transpose()
-    print("Czy macierz udało się \"naprawić\": ", end="")
-    if tick_off(was_fix_successful): number_of_conditions +=1
-elif yes:
+if not yes:
+    was_fix_successful, res = mf.try_fix_matrix(matrix.transpose())
+    print("    Czy macierz udało się \"naprawić\": ", end="")
+    if tick_off(was_fix_successful):
+        matrix = res.transpose()
+        number_of_conditions +=1
+else:
     number_of_conditions += 1
 
 

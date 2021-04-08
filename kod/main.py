@@ -174,5 +174,6 @@ print("Wynik:                   ", end="")
 print(result)
 print("##################################")
 
+
 # wygeneruj wykres
 charts.create_chart(np.array(points).transpose(), input("nazwij plik wykresu: "))
